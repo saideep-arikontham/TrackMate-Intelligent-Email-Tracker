@@ -1,3 +1,4 @@
+# app/services/gmail_client.py
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
 
@@ -17,6 +18,7 @@ def batch_fetch_email_metadata(service, messages):
             def get_header(name, default=""):
                 return next((h["value"] for h in headers if h.get("name", "").lower() == name), default)
             email_list.append({
+                "id": response.get("id"),
                 "subject": get_header("subject", "No Subject"),
                 "from":    get_header("from", "Unknown"),
                 "date":    get_header("date", ""),

@@ -7,86 +7,198 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    body{font-family:'Inter',sans-serif;background:#0B1120;
-      background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,.05) 1px, transparent 0);
-      background-size:2rem 2rem}
-    .glass{background:rgba(23,33,56,.6);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1)}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-    .fade-in{animation:fadeIn .35s ease-out forwards}
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Custom theme (dark/light) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
 </head>
-<body class="text-slate-200 antialiased">
+<body class="antialiased selection:bg-indigo-500/30 selection:text-white">
+
+  <!-- Decorative corner accent -->
+  <div aria-hidden="true" class="pointer-events-none fixed -top-24 -right-24 h-[420px] w-[420px] rounded-full blur-3xl opacity-30"
+       style="background: radial-gradient(closest-side, rgba(124,58,237,.35), transparent)"></div>
+
   <!-- Login screen -->
   <section id="login-screen" class="min-h-screen hidden flex items-center justify-center p-6 fade-in">
-    <div class="text-center max-w-md w-full">
-      <h1 class="text-5xl font-extrabold text-white mb-3">Trackmate</h1>
-      <p class="text-slate-400 mb-8">Your intelligent job application tracker.</p>
+    <div class="text-center max-w-md w-full space-y-6">
+      <div class="mx-auto w-16 h-16 rounded-2xl grid place-items-center glow"
+           style="background: radial-gradient(closest-side, rgba(124,58,237,.25), rgba(34,211,238,.18)); border:1px solid rgba(255,255,255,.12)">
+        <!-- Spark icon -->
+        <svg width="28" height="28" viewBox="0 0 24 24" class="text-indigo-300" fill="currentColor" aria-hidden="true">
+          <path d="M12 2l1.7 4.5L18 8.2l-4.3 1.7L12 14l-1.7-4.1L6 8.2l4.3-1.7L12 2zM5 17l.9 2.3L8 20l-2.1.7L5 23l-.9-2.3L2 20l2.1-.7L5 17zm14-2 1.2 3.2L23 19l-2.8.8L19 23l-1.2-3.2L15 19l2.8-.8L19 15z"/>
+        </svg>
+      </div>
+      <h1 class="text-5xl font-black brand tracking-tight">Trackmate</h1>
+      <p class="text-slate-300/90 leading-relaxed">
+        Your intelligent job application tracker—clean views, quick triage, and a Kanban that actually helps.
+      </p>
+
       <a href="{{ url_for('auth.login') }}"
-         class="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-semibold shadow-lg">
+         class="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-2xl btn-primary raise focus-visible:ring-4 focus-visible:ring-indigo-400/40">
+        <svg class="mr-2 -ml-1" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M21.35 11.1H12v2.8h5.3A5.7 5.7 0 1 1 6.3 8.3l2 1.5A3.4 3.4 0 1 0 12 15.4a3.3 3.3 0 0 0 3.3-2.7H12v-2.8h9.35z"/>
+        </svg>
         Log in with Google
       </a>
+
+      <p class="text-xs text-slate-400">By continuing you agree to our <a class="underline decoration-dotted hover:text-slate-300" href="#">Terms</a>.</p>
     </div>
   </section>
 
   <!-- App screen -->
   <main id="main-app" class="min-h-screen hidden p-6 max-w-6xl mx-auto fade-in">
     <header class="flex items-center justify-between mb-8">
-      <h1 class="text-3xl font-bold text-white">Trackmate</h1>
-      <a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-700/50">
-        Logout
-      </a>
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl glow grid place-items-center"
+             style="background: radial-gradient(closest-side, rgba(124,58,237,.28), rgba(34,211,238,.14)); border:1px solid rgba(255,255,255,.12)">
+          <svg width="18" height="18" viewBox="0 0 24 24" class="text-indigo-300" fill="currentColor" aria-hidden="true">
+            <path d="M12 2l1.7 4.5L18 8.2l-4.3 1.7L12 14l-1.7-4.1L6 8.2l4.3-1.7L12 2z"/>
+          </svg>
+        </div>
+        <h1 class="text-3xl font-extrabold brand">Trackmate</h1>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Theme toggle -->
+        <button id="btn-theme-toggle" type="button"
+                class="px-3 py-2 rounded-xl btn-ghost raise text-slate-200"
+                aria-label="Toggle theme">
+          <span id="theme-icon" aria-hidden="true"></span>
+        </button>
+
+        <a href="{{ url_for('auth.logout') }}"
+           class="px-4 py-2 rounded-xl btn-ghost raise text-slate-200">
+          Logout
+        </a>
+      </div>
     </header>
 
-    <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-      <div class="glass p-6 rounded-2xl flex items-center space-x-4">
-        <div class="bg-blue-500/20 p-3 rounded-lg">📬</div>
-        <div>
+    <!-- Top cards (clickable) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <!-- Unread -->
+      <button id="btn-open-unread" type="button"
+              class="glass p-6 rounded-2xl flex items-center gap-4 raise text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400"
+              title="Open unread messages in the past 24 hours" aria-label="Open all unread">
+        <div class="pill p-3 rounded-xl">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" class="text-sky-300" aria-hidden="true">
+            <path d="M19 3H5a2 2 0 0 0-2 2v10h5l2 2h4l2-2h5V5a2 2 0 0 0-2-2zm0 10h-3l-2 2h-4l-2-2H5V5h14v8z"/>
+          </svg>
+        </div>
+        <div class="flex-1">
           <p class="text-slate-400">Unread (24h)</p>
-          <p id="stat-unread" class="text-4xl font-bold text-white">–</p>
+          <div class="flex items-end gap-2">
+            <p id="stat-unread" class="text-4xl font-black text-white tracking-tight">–</p>
+            <span class="text-xs text-emerald-300/80 pill px-2 py-0.5 rounded-lg">Live</span>
+          </div>
         </div>
-      </div>
-      <div class="glass p-6 rounded-2xl flex items-center space-x-4">
-        <div class="bg-amber-500/20 p-3 rounded-lg">⚠️</div>
-        <div>
-          <p class="text-slate-400">Requires Attention</p>
-          <p id="stat-attention" class="text-4xl font-bold text-white">–</p>
-        </div>
-      </div>
-    </div>
+      </button>
 
-    <!-- Actions -->
-    <div class="flex flex-col sm:flex-row gap-4 mb-8">
-      <button id="btn-open-unread" class="flex-1 glass px-4 py-3 rounded-xl hover:bg-indigo-600/30">
-        Open All Unread
+      <!-- Requires Attention -->
+      <button id="btn-open-attention" type="button"
+              class="glass p-6 rounded-2xl flex items-center gap-4 raise text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400"
+              title="Show emails labeled as Requires Attention" aria-label="Open Requires Attention">
+        <div class="pill p-3 rounded-xl">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" class="text-amber-300" aria-hidden="true">
+            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+          </svg>
+        </div>
+        <div class="flex-1">
+          <p class="text-slate-400">Requires Attention</p>
+          <div class="flex items-end gap-2">
+            <p id="stat-attention" class="text-4xl font-black text-white tracking-tight">–</p>
+            <span class="text-xs text-rose-300/80 pill px-2 py-0.5 rounded-lg">Alerts</span>
+          </div>
+        </div>
       </button>
-      <button id="btn-open-attention" class="flex-1 glass px-4 py-3 rounded-xl hover:bg-indigo-600/30">
-        Open “Requires Attention”
-      </button>
-      <button id="btn-open-tracker" class="flex-1 glass px-4 py-3 rounded-xl hover:bg-indigo-600/30">
-        Open Job Tracker
+
+      <!-- Job Tracker -->
+      <button id="btn-open-tracker" type="button"
+              class="glass p-6 rounded-2xl flex items-center gap-4 raise text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400"
+              title="Open Kanban powered by your tracker sheet" aria-label="Open Job Tracker">
+        <div class="pill p-3 rounded-xl">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h3v8H8V8zm5 0h3v5h-3V8z"/>
+          </svg>
+        </div>
+        <div class="flex-1">
+          <p class="text-slate-400">Kanban</p>
+          <p class="text-2xl font-bold text-white tracking-tight">Job Tracker</p>
+        </div>
       </button>
     </div>
 
     <!-- Content -->
     <section class="glass rounded-2xl p-4">
-      <div id="loader" class="hidden py-16 text-center">Loading…</div>
-      <div id="empty" class="py-16 text-center text-slate-400">Select an option to view your data.</div>
+      <div class="divider mb-4"></div>
+
+      <div id="loader" class="hidden py-16 text-center">
+        <div class="mx-auto w-8 h-8 rounded-full border-2 border-indigo-400 border-t-transparent animate-spin mb-3"></div>
+        <p class="text-slate-400">Loading…</p>
+      </div>
+
+      <div id="empty" class="py-16 text-center text-slate-400">
+        Select an option to view your data.
+      </div>
+
       <ul id="email-list" class="space-y-3 hidden"></ul>
 
       <!-- Simple placeholder Kanban -->
       <div id="kanban" class="hidden">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-slate-900/50 rounded-xl p-4"><h3 class="font-bold mb-3">Applied</h3><div id="col-applied" class="space-y-3"></div></div>
-          <div class="bg-slate-900/50 rounded-xl p-4"><h3 class="font-bold mb-3">Interviewing</h3><div id="col-interview" class="space-y-3"></div></div>
-          <div class="bg-slate-900/50 rounded-xl p-4"><h3 class="font-bold mb-3">Offer</h3><div id="col-offer" class="space-y-3"></div></div>
-          <div class="bg-slate-900/50 rounded-xl p-4"><h3 class="font-bold mb-3">Rejected</h3><div id="col-rejected" class="space-y-3"></div></div>
+          <div class="bg-slate-900/40 rounded-xl p-4 ring-1 ring-white/10">
+            <h3 class="font-bold mb-3 text-slate-100 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_0_3px_rgba(56,189,248,.18)]"></span>
+              Applied
+            </h3>
+            <div id="col-applied" class="space-y-3"></div>
+          </div>
+
+          <div class="bg-slate-900/40 rounded-xl p-4 ring-1 ring-white/10">
+            <h3 class="font-bold mb-3 text-slate-100 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_0_3px_rgba(251,191,36,.18)]"></span>
+              Interviewing
+            </h3>
+            <div id="col-interview" class="space-y-3"></div>
+          </div>
+
+          <div class="bg-slate-900/40 rounded-xl p-4 ring-1 ring-white/10">
+            <h3 class="font-bold mb-3 text-slate-100 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,.18)]"></span>
+              Offer
+            </h3>
+            <div id="col-offer" class="space-y-3"></div>
+          </div>
+
+          <div class="bg-slate-900/40 rounded-xl p-4 ring-1 ring-white/10">
+            <h3 class="font-bold mb-3 text-slate-100 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_0_3px_rgba(244,63,94,.18)]"></span>
+              Rejected
+            </h3>
+            <div id="col-rejected" class="space-y-3"></div>
+          </div>
         </div>
       </div>
     </section>
+
+    <footer class="mt-10 text-center text-xs text-slate-500">
+      Built with ❤️ for job hunters • <span class="text-slate-400">Trackmate</span>
+    </footer>
   </main>
+
+  <!-- Modal (still present but unused) -->
+  <div id="email-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true" aria-labelledby="modal-subject">
+    <div class="glass rounded-2xl p-6 max-w-3xl w-full modal-card">
+      <div class="flex justify-between items-center mb-4">
+        <h2 id="modal-subject" class="text-xl font-bold text-white truncate"></h2>
+        <button id="modal-close" class="text-slate-300 hover:text-white text-2xl leading-none" aria-label="Close">&times;</button>
+      </div>
+      <div class="text-sm text-slate-400 mb-4 border-b border-slate-700/60 pb-4">
+        <p><strong>From:</strong> <span id="modal-from"></span></p>
+        <p><strong>Date:</strong> <span id="modal-date"></span></p>
+      </div>
+      <div id="modal-body" class="text-slate-300 whitespace-pre-wrap max-h-[60vh] overflow-y-auto pr-2"></div>
+    </div>
+  </div>
 
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
