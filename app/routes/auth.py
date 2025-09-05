@@ -1,6 +1,6 @@
 # app/routes/auth.py
 
-from flask import Blueprint, current_app, session, request, redirect, url_for
+from flask import Blueprint, current_app, session, request, redirect, url_for, jsonify
 from app.services.google_oauth import build_flow
 
 auth_bp = Blueprint("auth", __name__)
@@ -45,15 +45,15 @@ def callback():
     return redirect(url_for("views.index"))
 
 
-@auth_bp.route("/auth/status")
+@auth_bp.route("/status")
 def status():
     return jsonify({"isAuthenticated": "credentials" in session})
 
-@auth_bp.route("/auth/logout")
+@auth_bp.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("views.index"))
 
-@auth_bp.route("/auth/google")
+@auth_bp.route("/google")
 def google_alias():
     return redirect(url_for("auth.login"))
