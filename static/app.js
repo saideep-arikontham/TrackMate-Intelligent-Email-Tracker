@@ -40,9 +40,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+// in static/app.js
+
   async function refreshStats() {
     try {
-      const res = await fetch("/api/unread-count");
+      const res = await fetch("/api/unread-count"); // <-- No change needed here
       const data = await res.json();
       statUnread.textContent = data.count ?? 0;
     } catch {
@@ -50,7 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-      const res = await fetch("/api/emails?q=" + encodeURIComponent("is:unread label:Requires-Attention"));
+      const res = await fetch("/api/emails?q=" + encodeURIComponent("is:unread label:Requires-Attention")); // <-- Changed URL
       const data = await res.json();
       statAttention.textContent = Array.isArray(data) ? data.length : 0;
     } catch {
@@ -63,9 +65,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     hide(empty);
     show(loader);
     try {
-      const res = await fetch("/api/emails?q=" + encodeURIComponent(query));
+      const res = await fetch("/api/emails?q=" + encodeURIComponent(query)); // <-- Changed URL
       if (!res.ok) throw new Error("HTTP " + res.status);
       const emails = await res.json();
+
 
       hide(loader);
       if (!Array.isArray(emails) || emails.length === 0) {

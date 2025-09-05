@@ -1,6 +1,6 @@
 # in app/routes/auth.py
 
-from flask import Blueprint, current_app, session, request, redirect, jsonify, url_for, flash
+from flask import Blueprint, current_app, session, request, redirect, jsonify, url_for
 from app.services.google_oauth import build_flow
 
 auth_bp = Blueprint("auth", __name__)
@@ -22,11 +22,12 @@ def login():
         prompt="consent select_account",
     )
     session["state"] = state
-    session["oauth_cfg"] = {"redirect_uri": current_app.config["GOOGLE_REDIRECT_URI"]}
+    # The line below was removed
     return redirect(authorization_url)
 
-@auth_bp.route("/oauth2/callback")  # <-- This is the key change
+@auth_bp.route("/oauth2/callback")
 def callback():
+    print(f"DEBUG: Incoming URL from Google:")
     try:
         flow = _make_flow()
         flow.fetch_token(authorization_response=request.url)

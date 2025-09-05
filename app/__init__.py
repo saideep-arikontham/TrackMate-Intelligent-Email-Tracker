@@ -14,12 +14,11 @@ def create_app():
 
     # Register blueprints
     from .routes.auth import auth_bp
-    from .routes.views import views_bp 
-    # Add other blueprints like gmail_bp here
+    from .routes.views import views_bp
+    from .routes.gmail import gmail_bp  # <-- Add this line
 
-    # Make sure there is no url_prefix here
     app.register_blueprint(auth_bp)
     app.register_blueprint(views_bp, url_prefix='/')
-    # app.register_blueprint(gmail_bp, url_prefix='/api/gmail')
+    app.register_blueprint(gmail_bp, url_prefix='/api') # <-- Add this line
 
     return app
