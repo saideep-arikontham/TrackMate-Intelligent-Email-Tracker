@@ -1,3 +1,5 @@
+# in app/routes/auth.py
+
 from flask import Blueprint, current_app, session, request, redirect, jsonify, url_for, flash
 from app.services.google_oauth import build_flow
 
@@ -11,20 +13,19 @@ def _make_flow():
         current_app.config["GOOGLE_SCOPES"],
     )
 
-@auth_bp.route("/login")
+@auth_bp.route("/auth/login")
 def login():
     flow = _make_flow()
-    # Force Google to show the account picker; request offline so we get refresh_token
     authorization_url, state = flow.authorization_url(
         access_type="offline",
         include_granted_scopes="true",
-        prompt="consent select_account",  # ← ensures you can choose an account
+        prompt="consent select_account",
     )
     session["state"] = state
     session["oauth_cfg"] = {"redirect_uri": current_app.config["GOOGLE_REDIRECT_URI"]}
     return redirect(authorization_url)
 
-@auth_bp.route("/callback")
+@auth_bp.route("/oauth2/callback")  # <-- This is the key change
 def callback():
     try:
         flow = _make_flow()
@@ -40,9 +41,8 @@ def callback():
         }
         return redirect(url_for("views.index"))
     except Exception as e:
-        # Print the exact error in the server logs and show a friendly hint in the browser
         print("OAuth callback error:", repr(e))
-        err = request.args.get("error")  # e.g., access_denied
+        err = request.args.get("error")
         err_desc = request.args.get("error_description")
         hint = (
             "Common causes: (1) redirect URI mismatch; (2) app in Testing and you're not a Test user; "
@@ -56,16 +56,15 @@ def callback():
             400,
         )
 
-@auth_bp.route("/status")
+@auth_bp.route("/auth/status")
 def status():
     return jsonify({"isAuthenticated": "credentials" in session})
 
-@auth_bp.route("/logout")
+@auth_bp.route("/auth/logout")
 def logout():
     session.clear()
     return redirect(url_for("views.index"))
 
-# Optional alias if you previously used /auth/google
-@auth_bp.route("/google")
+@auth_bp.route("/auth/google")
 def google_alias():
     return redirect(url_for("auth.login"))

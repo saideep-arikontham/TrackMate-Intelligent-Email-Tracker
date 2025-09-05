@@ -15,7 +15,7 @@ class Config:
     # Google OAuth Config
     GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
     GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
-    GOOGLE_REDIRECT_URI = "http://localhost:5050/auth/callback" # Note the /auth prefix
+    GOOGLE_REDIRECT_URI = "http://localhost:5050/oauth2/callback" # Note the /auth prefix
     GOOGLE_SCOPES = [
         'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/userinfo.profile',
