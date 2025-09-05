@@ -17,7 +17,7 @@ def create_app():
     from .routes.views import views_bp
     from .routes.gmail import gmail_bp  # <-- Add this line
 
-    app.register_blueprint(auth_bp)
+    app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(views_bp, url_prefix='/')
     app.register_blueprint(gmail_bp, url_prefix='/api') # <-- Add this line
 

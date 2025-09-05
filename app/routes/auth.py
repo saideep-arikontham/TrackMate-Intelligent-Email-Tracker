@@ -1,6 +1,6 @@
-# in app/routes/auth.py
+# app/routes/auth.py
 
-from flask import Blueprint, current_app, session, request, redirect, jsonify, url_for
+from flask import Blueprint, current_app, session, request, redirect, url_for
 from app.services.google_oauth import build_flow
 
 auth_bp = Blueprint("auth", __name__)
@@ -13,49 +13,37 @@ def _make_flow():
         current_app.config["GOOGLE_SCOPES"],
     )
 
-@auth_bp.route("/auth/login")
+@auth_bp.route("/login")
 def login():
     flow = _make_flow()
     authorization_url, state = flow.authorization_url(
         access_type="offline",
-        include_granted_scopes="true",
-        prompt="consent select_account",
+        include_granted_scopes="false",
+        prompt="select_account consent"
     )
     session["state"] = state
-    # The line below was removed
     return redirect(authorization_url)
 
 @auth_bp.route("/oauth2/callback")
 def callback():
-    print(f"DEBUG: Incoming URL from Google:")
-    try:
-        flow = _make_flow()
-        flow.fetch_token(authorization_response=request.url)
-        creds = flow.credentials
-        session["credentials"] = {
-            "token": creds.token,
-            "refresh_token": getattr(creds, "refresh_token", None),
-            "token_uri": creds.token_uri,
-            "client_id": creds.client_id,
-            "client_secret": creds.client_secret,
-            "scopes": creds.scopes,
-        }
-        return redirect(url_for("views.index"))
-    except Exception as e:
-        print("OAuth callback error:", repr(e))
-        err = request.args.get("error")
-        err_desc = request.args.get("error_description")
-        hint = (
-            "Common causes: (1) redirect URI mismatch; (2) app in Testing and you're not a Test user; "
-            "(3) wrong OAuth client type; (4) Gmail API not enabled."
-        )
-        return (
-            f"<h2>Login failed</h2>"
-            f"<pre>{err or ''} {err_desc or ''}</pre>"
-            f"<p>{hint}</p>"
-            f"<p>Expected redirect URI: <code>{current_app.config['GOOGLE_REDIRECT_URI']}</code></p>",
-            400,
-        )
+    # Optional: validate state to prevent CSRF
+    state = session.get("state")
+    if state and state != request.args.get("state"):
+        return ("Invalid state parameter.", 400)
+
+    flow = _make_flow()
+    flow.fetch_token(authorization_response=request.url)
+    creds = flow.credentials
+    session["credentials"] = {
+        "token": creds.token,
+        "refresh_token": getattr(creds, "refresh_token", None),
+        "token_uri": creds.token_uri,
+        "client_id": creds.client_id,
+        "client_secret": creds.client_secret,
+        "scopes": creds.scopes,
+    }
+    return redirect(url_for("views.index"))
+
 
 @auth_bp.route("/auth/status")
 def status():
