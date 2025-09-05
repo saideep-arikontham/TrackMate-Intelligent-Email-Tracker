@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trackmate – Job Application Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body{font-family:'Inter',sans-serif;background:#0B1120;
+      background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,.05) 1px, transparent 0);
+      background-size:2rem 2rem}
+    .glass{background:rgba(23,33,56,.6);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1)}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .fade-in{animation:fadeIn .35s ease-out forwards}
+  </style>
+</head>
+<body class="text-slate-200 antialiased">
+  <!-- Login screen -->
+  <section id="login-screen" class="min-h-screen hidden flex items-center justify-center p-6 fade-in">
+    <div class="text-center max-w-md w-full">
+      <h1 class="text-5xl font-extrabold text-white mb-3">Trackmate</h1>
+      <p class="text-slate-400 mb-8">Your intelligent job application tracker.</p>
+      <a href="{{ url_for('auth.login') }}"
+         class="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-semibold shadow-lg">
+        Log in with Google
+      </a>
+    </div>
+  </section>
+
+  <!-- App screen -->
+  <main id="main-app" class="min-h-screen hidden p-6 max-w-6xl mx-auto fade-in">
+    <header class="flex items-center justify-between mb-8">
+      <h1 class="text-3xl font-bold text-white">Trackmate</h1>
+      <a href="{{ url_for('auth.logout') }}" class="px-4 py-2 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-700/50">
+        Logout
+      </a>
+    </header>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div class="glass p-6 rounded-2xl flex items-center space-x-4">
+        <div class="bg-blue-500/20 p-3 rounded-lg">📬</div>
+        <div>
+          <p class="text-slate-400">Unread (24h)</p>
+          <p id="stat-unread" class="text-4xl font-bold text-white">–</p>
+        </div>
+      </div>
+      <div class="glass p-6 rounded-2xl flex items-center space-x-4">
+        <div class="bg-amber-500/20 p-3 rounded-lg">⚠️</div>
+        <div>
+          <p class="text-slate-400">Requires Attention</p>
+          <p id="stat-attention" class="text-4xl font-bold text-white">–</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+      <button id="btn-open-unread" class="flex-1 glass px-4 py-3 rounded-xl hover:bg-indigo-600/30">
+        Open All Unread
+      </button>
+      <button id="btn-open-attention" class="flex-1 glass px-4 py-3 rounded-xl hover:bg-indigo-600/30">
+        Open “Requires Attention”
+      </button>
+      <button id="btn-open-tracker" class="flex-1 glass px-4 py-3 rounded-xl hover:bg-indigo-600/30">
+        Open Job Tracker
+      </button>
+    </div>
+
+    <!-- Content -->
+    <section class="glass rounded-2xl p-4">
+      <div id="loader" class="hidden py-16 text-center">Loading…</div>
+      <div id="empty" class="py-16 text-center text-slate-400">Select an option to view your data.</div>
+      <ul id="email-list" class="space-y-3 hidden"></ul>
+
+      <!-- Simple placeholder Kanban -->
+      <div id="kanban" class="hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-slate-900/50 rounded-xl p-4"><h3 class="font-bold mb-3">Applied</h3><div id="col-applied" class="space-y-3"></div></div>
+          <div class="bg-slate-900/50 rounded-xl p-4"><h3 class="font-bold mb-3">Interviewing</h3><div id="col-interview" class="space-y-3"></div></div>
+          <div class="bg-slate-900/50 rounded-xl p-4"><h3 class="font-bold mb-3">Offer</h3><div id="col-offer" class="space-y-3"></div></div>
+          <div class="bg-slate-900/50 rounded-xl p-4"><h3 class="font-bold mb-3">Rejected</h3><div id="col-rejected" class="space-y-3"></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
