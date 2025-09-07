@@ -15,7 +15,7 @@ const Dashboard = () => {
     loading: false
   });
   const [jobData, setJobData] = useState([]);
-  
+
 
   const API = import.meta.env.VITE_API_BASE_URL || '';
 
@@ -173,88 +173,64 @@ const Dashboard = () => {
 
 
   const renderDashboardCards = () => (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
       {/* Unread Emails Card */}
-      <div 
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 cursor-pointer hover:shadow-md transition-shadow duration-200"
+      <div
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveView('unread')}
         onClick={() => setActiveView('unread')}
+        className="group rounded-2xl p-[1px] bg-gradient-to-br from-indigo-500/40 via-fuchsia-500/30 to-blue-500/30 hover:from-indigo-500/60 hover:via-fuchsia-500/50 hover:to-blue-500/50 transition-all duration-300 cursor-pointer"
       >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="bg-blue-100 dark:bg-blue-900 p-2 rounded-lg">
+        <div className="rounded-2xl bg-white/60 dark:bg-gray-900/50 backdrop-blur-xl p-6 shadow-lg group-hover:shadow-xl transition-all">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900">
               <Mail className="h-6 w-6 text-blue-600 dark:text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Unread (24h)
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Unread (24h)</h3>
           </div>
-        </div>
-        <div className="space-y-2">
-          <p className="text-3xl font-bold text-gray-900 dark:text-white">
-            {emailData.unread.length}
-          </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            New emails in last 24 hours
-          </p>
-          <button className="w-full mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200">
-            View All
-          </button>
+          <p className="text-4xl font-extrabold text-gray-900 dark:text-white">{emailData.unread.length}</p>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">New emails in last 24 hours</p>
         </div>
       </div>
 
       {/* Requires Attention Card */}
-      <div 
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 cursor-pointer hover:shadow-md transition-shadow duration-200"
+      <div
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveView('attention')}
         onClick={() => setActiveView('attention')}
+        className="group rounded-2xl p-[1px] bg-gradient-to-br from-orange-500/40 via-amber-500/30 to-pink-500/30 hover:from-orange-500/60 hover:via-amber-500/50 hover:to-pink-500/50 transition-all duration-300 cursor-pointer"
       >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="bg-orange-100 dark:bg-orange-900 p-2 rounded-lg">
+        <div className="rounded-2xl bg-white/60 dark:bg-gray-900/50 backdrop-blur-xl p-6 shadow-lg group-hover:shadow-xl transition-all">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="p-2 rounded-lg bg-orange-100 dark:bg-orange-900">
               <AlertTriangle className="h-6 w-6 text-orange-600 dark:text-orange-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Requires Attention
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Requires Attention</h3>
           </div>
-        </div>
-        <div className="space-y-2">
-          <p className="text-3xl font-bold text-gray-900 dark:text-white">
-            {emailData.requiresAttention.length}
-          </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Emails needing immediate action
-          </p>
-          <button className="w-full mt-4 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors duration-200">
-            View All
-          </button>
+          <p className="text-4xl font-extrabold text-gray-900 dark:text-white">{emailData.requiresAttention.length}</p>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Emails needing immediate action</p>
         </div>
       </div>
 
       {/* Job Tracker Card */}
-      <div 
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 cursor-pointer hover:shadow-md transition-shadow duration-200"
+      <div
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveView('jobs')}
         onClick={() => setActiveView('jobs')}
+        className="group rounded-2xl p-[1px] bg-gradient-to-br from-emerald-500/40 via-teal-500/30 to-cyan-500/30 hover:from-emerald-500/60 hover:via-teal-500/50 hover:to-cyan-500/50 transition-all duration-300 cursor-pointer"
       >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="bg-green-100 dark:bg-green-900 p-2 rounded-lg">
+        <div className="rounded-2xl bg-white/60 dark:bg-gray-900/50 backdrop-blur-xl p-6 shadow-lg group-hover:shadow-xl transition-all">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900">
               <Briefcase className="h-6 w-6 text-green-600 dark:text-green-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Job Tracker
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Job Tracker</h3>
           </div>
-        </div>
-        <div className="space-y-2">
-          <p className="text-3xl font-bold text-gray-900 dark:text-white">
-            {jobData.length}
-          </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Active job applications
-          </p>
-          <button className="w-full mt-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors duration-200">
-            View Board
-          </button>
+          <p className="text-4xl font-extrabold text-gray-900 dark:text-white">{jobData.length}</p>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Active job applications</p>
         </div>
       </div>
     </div>
@@ -264,7 +240,7 @@ const Dashboard = () => {
     switch (activeView) {
       case 'unread':
         return (
-          <EmailList 
+          <EmailList
             emails={emailData.unread}
             title="Unread Emails (Last 24 Hours)"
             loading={emailData.loading}
@@ -273,7 +249,7 @@ const Dashboard = () => {
         );
       case 'attention':
         return (
-          <EmailList 
+          <EmailList
             emails={emailData.requiresAttention}
             title="Emails Requiring Attention"
             loading={emailData.loading}
@@ -282,7 +258,7 @@ const Dashboard = () => {
         );
       case 'jobs':
         return (
-          <JobTracker 
+          <JobTracker
             jobs={jobData}
             onJobsChange={setJobData}
             onBack={() => setActiveView('dashboard')}
@@ -298,9 +274,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-radial-fade">
       <Header />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {renderContent()}
       </main>
     </div>
