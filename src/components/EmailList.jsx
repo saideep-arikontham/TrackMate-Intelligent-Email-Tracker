@@ -86,9 +86,9 @@ const EmailList = ({ emails, title, loading, onBack }) => {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+    <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-md rounded-xl shadow-lg border border-white/20 dark:border-white/10">
       {/* Header */}
-      <div className="border-b border-gray-200 dark:border-gray-700 p-6">
+      <div className="border-b border-white/20 dark:border-white/10 p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
@@ -110,7 +110,7 @@ const EmailList = ({ emails, title, loading, onBack }) => {
       </div>
 
       {/* Email list */}
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
+      <div className="divide-y divide-white/20 dark:divide-white/10">
         {loading ? (
           <div className="p-8 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -126,7 +126,7 @@ const EmailList = ({ emails, title, loading, onBack }) => {
             <div
               key={email.id}
               onClick={() => handleEmailClick(email)}
-              className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200"
+              className="p-6 hover:bg-white/40 dark:hover:bg-white/5 cursor-pointer transition-colors duration-200"
             >
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">

@@ -7,11 +7,11 @@ const JobTracker = ({ jobs, onJobsChange, onBack }) => {
   const [draggedJob, setDraggedJob] = useState(null);
 
   const statusColumns = [
-    { id: 'applied', title: 'Applied', color: 'bg-gray-100 dark:bg-gray-700' },
-    { id: 'screening', title: 'Screening', color: 'bg-blue-100 dark:bg-blue-900' },
-    { id: 'interview', title: 'Interview', color: 'bg-yellow-100 dark:bg-yellow-900' },
-    { id: 'offer', title: 'Offer', color: 'bg-green-100 dark:bg-green-900' },
-    { id: 'rejected', title: 'Rejected', color: 'bg-red-100 dark:bg-red-900' }
+    { id: 'applied', title: 'Applied', color: 'from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900' },
+    { id: 'screening', title: 'Screening', color: 'from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30' },
+    { id: 'interview', title: 'Interview', color: 'from-yellow-50 to-amber-50 dark:from-yellow-900/30 dark:to-amber-900/30' },
+    { id: 'offer', title: 'Offer', color: 'from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30' },
+    { id: 'rejected', title: 'Rejected', color: 'from-red-50 to-rose-50 dark:from-red-900/30 dark:to-rose-900/30' }
   ];
 
   const handleDragStart = (e, job) => {
@@ -74,8 +74,8 @@ const JobTracker = ({ jobs, onJobsChange, onBack }) => {
     };
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
+      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-6 w-full max-w-md mx-4 border border-white/20 dark:border-white/10 shadow-2xl">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             {job ? 'Edit Job Application' : 'Add New Job Application'}
           </h3>
@@ -90,7 +90,7 @@ const JobTracker = ({ jobs, onJobsChange, onBack }) => {
                 required
                 value={formData.companyName}
                 onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-3 py-2 border border-white/30 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700/60 dark:text-white bg-white/70"
               />
             </div>
             
@@ -103,7 +103,7 @@ const JobTracker = ({ jobs, onJobsChange, onBack }) => {
                 required
                 value={formData.positionTitle}
                 onChange={(e) => setFormData({ ...formData, positionTitle: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-3 py-2 border border-white/30 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700/60 dark:text-white bg-white/70"
               />
             </div>
             
@@ -114,7 +114,7 @@ const JobTracker = ({ jobs, onJobsChange, onBack }) => {
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-3 py-2 border border-white/30 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700/60 dark:text-white bg-white/70"
               >
                 {statusColumns.map(column => (
                   <option key={column.id} value={column.id}>
@@ -132,7 +132,7 @@ const JobTracker = ({ jobs, onJobsChange, onBack }) => {
                 type="text"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-3 py-2 border border-white/30 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700/60 dark:text-white bg-white/70"
               />
             </div>
             
@@ -145,7 +145,7 @@ const JobTracker = ({ jobs, onJobsChange, onBack }) => {
                 value={formData.salaryRange}
                 onChange={(e) => setFormData({ ...formData, salaryRange: e.target.value })}
                 placeholder="e.g. $100k - $120k"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-3 py-2 border border-white/30 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700/60 dark:text-white bg-white/70"
               />
             </div>
             
@@ -157,7 +157,7 @@ const JobTracker = ({ jobs, onJobsChange, onBack }) => {
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-3 py-2 border border-white/30 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700/60 dark:text-white bg-white/70"
               />
             </div>
             
@@ -186,7 +186,7 @@ const JobTracker = ({ jobs, onJobsChange, onBack }) => {
     <div
       draggable
       onDragStart={(e) => handleDragStart(e, job)}
-      className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-600 cursor-move hover:shadow-md transition-shadow duration-200"
+      className="bg-white/70 dark:bg-gray-800/60 backdrop-blur-md rounded-lg p-4 shadow-md border border-white/20 dark:border-white/10 cursor-move hover:shadow-lg transition-shadow duration-200"
     >
       <div className="flex items-start justify-between mb-3">
         <h4 className="font-semibold text-gray-900 dark:text-white text-sm">
@@ -273,7 +273,7 @@ const JobTracker = ({ jobs, onJobsChange, onBack }) => {
         {statusColumns.map((column) => (
           <div
             key={column.id}
-            className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4"
+            className={`rounded-lg p-4 bg-gradient-to-b ${column.color} border border-white/20 dark:border-white/10 backdrop-blur-sm`}
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, column.id)}
           >
